@@ -1,0 +1,88 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+@import "tailwindcss";
+/* @import url("https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap"); */
+:root {
+  --general-layout-grid-cols: 1fr 60% 10% 1fr;
+  /* --general-layout-grid-cols: 0.1fr 0.6fr 0.1fr 0.2fr; */
+  --general-layout-grid-rows: 2vh 13vh 1fr;
+  --librarians-layout-grid-cols: 1fr 90% 1fr;
+  --librarians-layout-grid-rows: 1fr 90% 1fr;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: #f4f7fc;
+  /* font-family: "PT Serif", serif; */
+  /* background-image: url("bookcollage2.png"); */
+}
+/* h1 {
+  margin-top: 80px;
+  font-size: 55px;
+  color: white;
+  font-family: Cambria;
+  text-align: center;
+  position: relative;
+  text-shadow: 0px 0px 10px #5cfaff, 0px 0px 20px #5cfaff, 0px 0px 40px #5cfaff,
+    0px 0px 80px #5cfaff;
+} */
+
+.section-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.section-header::before,
+.section-header::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 40%; /* adjust as needed */
+  height: 0.5px;
+  background-color: rgba(128, 128, 128, 0.233);
+}
+
+.section-header::before {
+  left: 0;
+}
+
+.section-header::after {
+  right: 0;
+}
+
+.auto-fit {
+  display: grid;
+  column-gap: 2rem;
+  row-gap: 3rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+/* .book-card {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 3;
+} */
+/* @media (min-width: 640px) {
+  .auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+} */
+
+/* Target the scrollbar */
+::-webkit-scrollbar {
+  width: 4px; /* Vertical scrollbar width */
+  height: 4px; /* Horizontal scrollbar height */
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Thumb (the draggable part) */
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 18px;
+}
