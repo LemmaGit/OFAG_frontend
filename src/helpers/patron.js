@@ -1,14 +1,5 @@
 import { URL } from "./utilFun";
 
-export async function checkToken() {
-  const res = await fetch(`${URL}/patrons/me`, {
-    method: "GET",
-    credentials: "include",
-  });
-
-  return await res.json();
-}
-
 export async function updateProfileInfo(userInfo) {
   const res = await fetch(`${URL}/patrons/update-profile`, {
     method: "PATCH",

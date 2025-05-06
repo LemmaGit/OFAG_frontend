@@ -70,3 +70,12 @@ export async function checkAuthorization() {
   // return { error: "User is not logged in" };
   return await res.json();
 }
+
+export async function checkToken() {
+  const res = await fetch(`${URL}/me`, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  return await res.json();
+}

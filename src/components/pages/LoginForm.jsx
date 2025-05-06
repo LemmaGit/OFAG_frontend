@@ -1,10 +1,9 @@
 import useFormHook from "../../hooks/useFormHook";
 import loginSchema from "../../schema/login";
 import useMutator from "../../hooks/useMutator";
-import { checkToken } from "../../helpers/patron";
 import InputErr from "./InputErr";
 import { useEffect } from "react";
-import { login } from "../../helpers/utilFun";
+import { checkToken, login } from "../../helpers/utilFun";
 import { toast } from "react-toastify";
 import { FiBook, FiLock, FiMail } from "react-icons/fi";
 
