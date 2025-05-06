@@ -1,6 +1,5 @@
-import { useState } from "react";
 import Book from "./Book";
-import BooksFilter from "./../patronPages/BooksFilter";
+// import BooksFilter from "./../patronPages/BooksFilter";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../../../hooks/useFetch";
 import { getBooks } from "../../../helpers/patron";
@@ -8,8 +7,8 @@ import { CircularProgress } from "@mui/material";
 import Layout from "../Layout";
 
 function Books() {
-  const [filter, setFilter] = useState("All");
-  const [category, setCategory] = useState("");
+  // const [filter, setFilter] = useState("All");
+  // const [category, setCategory] = useState("");
   const navigate = useNavigate();
   const {
     data: { books } = {},
