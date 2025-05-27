@@ -5,23 +5,49 @@ import useFetch from "../../../hooks/useFetch";
 import { getBooks } from "../../../helpers/patron";
 import { CircularProgress } from "@mui/material";
 import Layout from "../Layout";
+import { useState } from "react";
+import dayjs from "dayjs";
+import BooksFilter from "../patronPages/BooksFilter";
 
 function Books() {
-  // const [filter, setFilter] = useState("All");
-  // const [category, setCategory] = useState("");
+  const [filter, setFilter] = useState("All");
+  const [category, setCategory] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const {
     data: { books } = {},
     isLoading,
     isError,
   } = useFetch("books", getBooks);
+  const filteredBooks = books.filter((book) => {
+    const sevenDaysAgo = dayjs().subtract(7, "day");
+    const bookAddedAt = dayjs(book.addedAt);
+    const isNew = bookAddedAt.isAfter(sevenDaysAgo);
+    const matchesFilter =
+      filter === "All" ||
+      (filter === "New" && isNew) ||
+      (filter === "Available" && book.isAvailable);
 
+    const matchesCategory = category === "" || book.category === category;
+    const matchesSearch =
+      searchQuery === "" ||
+      book.title.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesFilter && matchesCategory && matchesSearch;
+  });
   function handleDetail(id) {
     navigate(`/book/${id}`);
   }
 
   return (
     <Layout>
+      <BooksFilter
+        filter={filter}
+        setFilter={setFilter}
+        category={category}
+        setCategory={setCategory}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+      />
       {isLoading && (
         <div className="flex justify-center items-center min-h-40">
           <CircularProgress />
@@ -42,8 +68,12 @@ function Books() {
             <div className="col-span-full flex justify-center items-center min-h-40 text-gray-500 text-lg">
               <p>No books found.</p>
             </div>
+          ) : filteredBooks.length === 0 ? (
+            <div className="col-span-full flex justify-center items-center min-h-40 text-gray-500 text-lg">
+              <p>No books found.</p>
+            </div>
           ) : (
-            books.map((book) => (
+            filteredBooks.map((book) => (
               <Book
                 key={book._id}
                 book={book}

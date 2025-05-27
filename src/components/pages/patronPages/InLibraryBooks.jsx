@@ -2,6 +2,7 @@ import { useState } from "react";
 import Book from "./Book";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../../../hooks/useFetch";
+import dayjs from "dayjs";
 import {
   getBooks,
   getBooksInReservationOrCheckout,
@@ -11,10 +12,12 @@ import {
 import { CircularProgress } from "@mui/material";
 import useMutator from "../../../hooks/useMutator";
 import { toast } from "react-toastify";
+import BooksFilter from "./BooksFilter";
 
 function Books() {
   const [filter, setFilter] = useState("All");
   const [category, setCategory] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const {
     data: { books } = {},
@@ -51,14 +54,21 @@ function Books() {
     else return toast.error("Error cancelled hold");
   }
   const filteredBooks = books.filter((book) => {
+    //* NEW
+    const sevenDaysAgo = dayjs().subtract(7, "day");
+    const bookAddedAt = dayjs(book.addedAt);
+    const isNew = bookAddedAt.isAfter(sevenDaysAgo);
+
     const matchesFilter =
       filter === "All" ||
-      (filter === "New" && book.condition === "new") ||
+      (filter === "New" && isNew) ||
       (filter === "Available" && book.isAvailable);
 
     const matchesCategory = category === "" || book.category === category;
-
-    return matchesFilter && matchesCategory;
+    const matchesSearch =
+      searchQuery === "" ||
+      book.title.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesFilter && matchesCategory && matchesSearch;
   });
   function handleDetail(id) {
     navigate(`/book/${id}`);
@@ -66,6 +76,15 @@ function Books() {
 
   return (
     <div className="col-start-2 pt-8">
+      <BooksFilter
+        filter={filter}
+        setFilter={setFilter}
+        category={category}
+        setCategory={setCategory}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        smallMargin={true}
+      />
       {isFetchingBooks ||
         (isLoadingBooksInReservationOrCheckout && (
           <div className="flex justify-center items-center min-h-40">

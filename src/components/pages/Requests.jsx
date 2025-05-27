@@ -6,12 +6,12 @@ import {
   FiLoader,
   FiInbox,
 } from "react-icons/fi";
-import useFetch from "./../../../hooks/useFetch";
-import { getRequests } from "../../../helpers/manager";
+import useFetch from "../../hooks/useFetch";
+import { getRequests } from "../../helpers/manager";
 import { useState } from "react";
-import Request from "./Request";
-import dayjs from "./../../../helpers/dayjs";
-import getStatusBadge from "./GetBadge";
+import Request from "./managerPages/Request";
+import dayjs from "../../helpers/dayjs";
+import getStatusBadge from "./managerPages/GetBadge";
 function Requests() {
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);

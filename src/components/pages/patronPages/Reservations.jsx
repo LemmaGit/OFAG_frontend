@@ -19,6 +19,7 @@ import {
 } from "../../../helpers/utilFun";
 import useMutator from "../../../hooks/useMutator";
 import { toast } from "react-toastify";
+import dayjs from "dayjs";
 
 const YourReservations = () => {
   const {
@@ -110,9 +111,22 @@ const YourReservations = () => {
                     <TableCell className="text-gray-700">
                       {formatDateToDDMMYYYY(reservation.holdDate)}
                     </TableCell>
-                    <TableCell className="text-gray-700">
-                      In {getDayDifference(reservation.expirationDate, true)}{" "}
-                      Days
+                    <TableCell>
+                      <span
+                        className={`${
+                          dayjs(dayjs()).isAfter(reservation.expirationDate)
+                            ? "text-red-500 font-bold"
+                            : "text-gray-700 "
+                        }`}
+                      >
+                        {dayjs(dayjs()).isAfter(reservation.expirationDate)
+                          ? "expired"
+                          : `In ${getDayDifference(
+                              reservation.expirationDate,
+                              true
+                            )}
+                      Days`}
+                      </span>
                     </TableCell>
                     <TableCell>
                       <span
@@ -126,15 +140,17 @@ const YourReservations = () => {
                       </span>
                     </TableCell>
                     <TableCell align="center">
-                      <Button
-                        variant="contained"
-                        className="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-4 rounded-lg shadow-md transition-all duration-200"
-                        onClick={async () =>
-                          await cancelReservation(reservation.bookId._id)
-                        }
-                      >
-                        Cancel
-                      </Button>
+                      {!dayjs(dayjs()).isAfter(reservation.expirationDate) && (
+                        <Button
+                          variant="contained"
+                          className="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-4 rounded-lg shadow-md transition-all duration-200"
+                          onClick={async () =>
+                            await cancelReservation(reservation.bookId._id)
+                          }
+                        >
+                          Cancel
+                        </Button>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

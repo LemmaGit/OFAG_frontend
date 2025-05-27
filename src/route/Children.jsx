@@ -37,9 +37,7 @@ const ManagerProfile = lazy(() =>
 const BookDetailForManager = lazy(() =>
   import("../components/pages/managerPages/BookDetail")
 );
-const RequestsMgt = lazy(() =>
-  import("../components/pages/managerPages/RequestsMgt")
-);
+const RequestsMgt = lazy(() => import("../components/pages/RequestsMgt"));
 const SettingsMgt = lazy(() =>
   import("../components/pages/managerPages/SettingsMgt")
 );
@@ -128,6 +126,10 @@ export const librarianRouteChildren = [
   {
     path: "reports",
     element: <Reports />,
+  },
+  {
+    path: "requests",
+    element: <RequestsMgt />,
   },
   {
     path: "profile",

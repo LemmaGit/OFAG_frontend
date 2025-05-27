@@ -79,3 +79,12 @@ export async function checkToken() {
 
   return await res.json();
 }
+
+export async function getUploadedPdfs() {
+  const res = await fetch(`${URL}/uploaded-books/pdfs`, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  return await res.json();
+}

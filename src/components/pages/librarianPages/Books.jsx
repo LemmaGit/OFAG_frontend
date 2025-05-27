@@ -3,20 +3,27 @@ import BooksFilter from "../patronPages/BooksFilter";
 import Book from "./Book";
 import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 
 function Books({ books, isLoading, isError }) {
   const [filter, setFilter] = useState("All");
   const [category, setCategory] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const filteredBooks = books.filter((book) => {
+    const sevenDaysAgo = dayjs().subtract(7, "day");
+    const bookAddedAt = dayjs(book.addedAt);
+    const isNew = bookAddedAt.isAfter(sevenDaysAgo);
     const matchesFilter =
       filter === "All" ||
-      (filter === "New" && book.condition === "new") ||
+      (filter === "New" && isNew) ||
       (filter === "Available" && book.isAvailable);
 
     const matchesCategory = category === "" || book.category === category;
-
-    return matchesFilter && matchesCategory;
+    const matchesSearch =
+      searchQuery === "" ||
+      book.title.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesFilter && matchesCategory && matchesSearch;
   });
   function handleDetail(id) {
     navigate(`/book/${id}`);
@@ -28,6 +35,8 @@ function Books({ books, isLoading, isError }) {
         setFilter={setFilter}
         category={category}
         setCategory={setCategory}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
       />
 
       {isLoading && (

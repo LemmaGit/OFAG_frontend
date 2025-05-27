@@ -220,7 +220,15 @@ export async function getSettings() {
 
   return await res.json();
 }
+export const uploadPdf = async (data) => {
+  const res = await fetch(`${URL}/uploaded-books/upload`, {
+    method: "POST",
+    body: data,
+    credentials: "include",
+  });
 
+  return await res.json();
+};
 /*
 export const login = (path) => async (userInfo) => {
   const res = await fetch(`${URL}/${path}/signin`, {

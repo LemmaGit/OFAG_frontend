@@ -3,10 +3,11 @@ import useFetch from "../../../hooks/useFetch";
 import {
   getBookDetails,
   getBooksInReservationOrCheckout,
+  placeReservation,
 } from "../../../helpers/patron";
 import { CircularProgress } from "@mui/material";
 import Layout from "../Layout";
-
+import useMutator from "../../../hooks/useMutator";
 const Loading = () => (
   <div className="flex justify-center items-center min-h-[300px]">
     <CircularProgress />
@@ -41,6 +42,11 @@ function BookDetail() {
       ? true
       : false;
   }
+
+  const { mutateAsync: placeHold } = useMutator(
+    placeReservation,
+    "unavailable books for patron"
+  );
   return (
     <Layout>
       <div className="col-start-2 min-h-dvh p-4 sm:p-6">
@@ -118,7 +124,7 @@ function BookDetail() {
                           : "bg-blue-600 hover:bg-blue-700"
                       }`}
                       disabled={book.type === "reference"}
-                      // onClick={placeReservationOnClick}
+                      onClick={() => placeHold(book._id)}
                     >
                       {book.isAvailable ? "Hold" : "Waitlist"}
                     </button>

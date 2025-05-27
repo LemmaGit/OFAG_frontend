@@ -17,11 +17,22 @@ import {
 } from "@mui/material";
 import useFetch from "../../../hooks/useFetch";
 import { getCheckedoutBooks } from "../../../helpers/librarian";
+import dayjs from "dayjs";
 
 import CheckinForm from "./CheckinForm";
 import RenewForm from "./RenewForm";
 import { useSearchParams } from "react-router-dom";
-
+function getOverDueDays(issue) {
+  const isAfterNow = dayjs(dayjs()).isAfter(issue.dueDate);
+  console.log(isAfterNow);
+  let overdueDays;
+  if (isAfterNow) {
+    const now = dayjs();
+    const dueDate = dayjs(issue.dueDate);
+    overdueDays = now.diff(dueDate, "day");
+  }
+  return overdueDays || 0;
+}
 const CheckedoutBooks = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isCheckinFormOpen, setIsCheckinFormOpen] = useState(false);
@@ -63,19 +74,14 @@ const CheckedoutBooks = () => {
     setIsRenewFormOpen(true);
   };
 
-  const handleCheckin = (
-    patronId,
-    bookId,
-    status,
-    overdueFee,
-    bookConditionWhenCheckedout
-  ) => {
+  const handleCheckin = (issue) => {
+    const overdueDays = getOverDueDays(issue);
     setCheckinProps({
-      patronId,
-      bookId,
-      status,
-      overdueFee,
-      bookConditionWhenCheckedout,
+      patronId: issue.patronId,
+      bookId: issue.bookId,
+      status: overdueDays ? "overdue" : "not overdue",
+      overdueFee: issue.overdueFinePerDay * overdueDays,
+      bookConditionWhenCheckedout: issue.bookConditionWhenCheckedout,
     });
     setIsCheckinFormOpen(true);
   };
@@ -232,15 +238,7 @@ const CheckedoutBooks = () => {
                             variant="contained"
                             color="primary"
                             size="small"
-                            onClick={() =>
-                              handleCheckin(
-                                issue.patronId,
-                                issue.bookId,
-                                issue.status,
-                                issue.overdueFee,
-                                issue.bookConditionWhenCheckedout
-                              )
-                            }
+                            onClick={() => handleCheckin(issue)}
                           >
                             Check-In
                           </Button>

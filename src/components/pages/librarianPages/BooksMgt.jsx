@@ -7,7 +7,8 @@ import Books from "./Books";
 import ManageBooks from "./ManageBooks";
 import { getBooks } from "../../../helpers/librarian";
 import useFetch from "../../../hooks/useFetch";
-
+import { FiFileText } from "react-icons/fi";
+import PdfsList from "../PdfsList";
 function BooksMgt() {
   const {
     isLoading,
@@ -28,6 +29,14 @@ function BooksMgt() {
           </Tab>
           <Tab
             activeTab={activeTab}
+            tab="Uploaded PDFS"
+            handler={handler}
+            to="#"
+          >
+            <FiFileText className="w-5 h-5" />
+          </Tab>
+          <Tab
+            activeTab={activeTab}
             tab="Manage Books"
             handler={handler}
             to="#"
@@ -41,6 +50,7 @@ function BooksMgt() {
         {activeTab === "Books List" && (
           <Books isLoading={isLoading} isError={isError} books={books} />
         )}
+        {activeTab === "Uploaded PDFS" && <PdfsList />}
         {activeTab === "Manage Books" && (
           <ManageBooks isLoading={isLoading} isError={isError} books={books} />
         )}

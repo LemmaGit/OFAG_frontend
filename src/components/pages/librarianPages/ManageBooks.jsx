@@ -20,14 +20,16 @@ import EditBookDetails from "./EditBookDetails";
 import useMutator from "../../../hooks/useMutator";
 import { deleteBook } from "../../../helpers/librarian";
 import { toast } from "react-toastify";
-
+import UploadPdfModal from "./UploadPDF";
 const ManageBook = ({ isLoading, isError, books }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredBooks, setFilteredBooks] = useState(books);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [bookToBeEdited, setBookToBeEdited] = useState(null);
   const { mutateAsync } = useMutator(deleteBook, "books");
+
   useEffect(() => {
     setFilteredBooks(books);
   }, [books]);
@@ -92,7 +94,24 @@ const ManageBook = ({ isLoading, isError, books }) => {
               </Button>
             </div>
           </form>
-
+          <Button
+            variant="contained"
+            size="small"
+            color="info"
+            startIcon={<AddIcon />}
+            onClick={() => setIsUploadModalOpen(true)}
+            sx={{
+              // minWidth: "140px",
+              paddingX: 1.2,
+              paddingY: 1.1,
+              fontWeight: "600",
+              borderRadius: "8px",
+              marginRight: "8px",
+              "&:hover": { backgroundColor: "#04b4ff" },
+            }}
+          >
+            Upload Pdf
+          </Button>
           <Button
             variant="contained"
             size="small"
@@ -203,6 +222,11 @@ const ManageBook = ({ isLoading, isError, books }) => {
             setIsEditModalOpen={setIsEditModalOpen}
             book={bookToBeEdited}
           />
+        </div>
+      )}
+      {isUploadModalOpen && (
+        <div className="min-h-dvh z-10 absolute inset-0 flex items-center justify-center bg-black/50">
+          <UploadPdfModal setIsUploadModalOpen={setIsUploadModalOpen} />
         </div>
       )}
     </>

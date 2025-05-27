@@ -12,7 +12,17 @@ import {
 import useFetch from "../../../hooks/useFetch";
 import { getCheckedoutBooks } from "../../../helpers/patron";
 import { formatDateToDDMMYYYY } from "../../../helpers/utilFun";
-
+import dayjs from "dayjs";
+function getOverDueDays(book) {
+  const isAfterNow = dayjs(dayjs()).isAfter(book.dueDate);
+  let overdueDays;
+  if (isAfterNow) {
+    const now = dayjs();
+    const dueDate = dayjs(book.dueDate);
+    overdueDays = now.diff(dueDate, "day");
+  }
+  return overdueDays || 0;
+}
 const CheckedoutBooks = () => {
   const {
     isLoading,
@@ -79,41 +89,44 @@ const CheckedoutBooks = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {books.map((book) => (
-                  <TableRow
-                    key={book._id}
-                    className={`transition-all duration-200 hover:bg-gray-50 ${
-                      book.status === "overdue" ? "bg-red-50" : "bg-white"
-                    }`}
-                  >
-                    <TableCell className="font-medium text-gray-800">
-                      {book.bookTitle}
-                    </TableCell>
-                    <TableCell className="text-gray-700">
-                      {book.librarianFullName}
-                    </TableCell>
-                    <TableCell className="text-gray-700">
-                      {formatDateToDDMMYYYY(book.checkoutDate)}
-                    </TableCell>
-                    <TableCell className="text-gray-700">
-                      {formatDateToDDMMYYYY(book.dueDate)}
-                    </TableCell>
-                    <TableCell>
-                      <span
-                        className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                          book.status === "overdue"
-                            ? "bg-red-100 text-red-800"
-                            : "bg-green-100 text-green-800"
-                        }`}
-                      >
-                        {book.status}
-                      </span>
-                    </TableCell>
-                    <TableCell align="center" className="text-gray-700">
-                      {book.overduefee} Birr
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {books.map((book) => {
+                  const overdueDays = getOverDueDays(book);
+                  return (
+                    <TableRow
+                      key={book._id}
+                      className={`transition-all duration-200 hover:bg-gray-50 ${
+                        book.status === "overdue" ? "bg-red-50" : "bg-white"
+                      }`}
+                    >
+                      <TableCell className="font-medium text-gray-800">
+                        {book.bookTitle}
+                      </TableCell>
+                      <TableCell className="text-gray-700">
+                        {book.librarianFullName}
+                      </TableCell>
+                      <TableCell className="text-gray-700">
+                        {formatDateToDDMMYYYY(book.checkoutDate)}
+                      </TableCell>
+                      <TableCell className="text-gray-700">
+                        {formatDateToDDMMYYYY(book.dueDate)}
+                      </TableCell>
+                      <TableCell>
+                        <span
+                          className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                            overdueDays
+                              ? "bg-red-100 text-red-800"
+                              : "bg-green-100 text-green-800"
+                          }`}
+                        >
+                          {overdueDays ? "overdue" : "not-overdue"}
+                        </span>
+                      </TableCell>
+                      <TableCell align="center" className="text-gray-700">
+                        {book.overdueFinePerDay * overdueDays} Birr
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </TableContainer>
