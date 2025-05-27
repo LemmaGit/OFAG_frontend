@@ -11,7 +11,7 @@ function ManagerLayout() {
         <NavBar
           avatar={user.avatar}
           fullName={`${user.firstName} ${user.lastName}`}
-          role="Manager"
+          role="Admin"
         >
           <ManagerNaigations />
         </NavBar>
