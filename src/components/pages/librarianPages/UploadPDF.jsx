@@ -22,13 +22,7 @@ export default function UploadPdfModal({ setIsUploadModalOpen }) {
   const fileInputRef = React.createRef();
   const onSubmit = async (data) => {
     const formData = new FormData();
-    formData.append(
-      "author",
-      JSON.stringify({
-        firstName: data.authorFirstName,
-        lastName: data.authorLastName,
-      })
-    );
+    formData.append("author", JSON.stringify(data.author));
     delete data.author;
     Object.entries(data).forEach(([key, value]) => formData.append(key, value));
     try {

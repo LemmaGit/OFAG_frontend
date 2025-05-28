@@ -12,7 +12,12 @@ const editionOptions = Array.from({ length: 15 }, (_, i) => {
 });
 const booksSchema = z
   .object({
-    copies: z.number().min(0),
+    copies: z
+      .number({
+        required_error: "This field is required",
+        invalid_type_error: "Copies must be zero or more",
+      })
+      .min(0, { message: "Copies must be zero or more" }),
     availableCopies: z.number().min(0).optional(),
   })
   .transform((data) => ({

@@ -229,7 +229,7 @@ export default function AddBook({ setIsAddModalOpen }) {
                   className="w-full px-3 py-2 border border-blue-200 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   min="0"
                 />
-                {errors.books?.new.copies && (
+                {errors.books?.new?.copies && (
                   <p className="mt-1 text-sm text-red-600">
                     {errors.books.new.copies?.message}
                   </p>
@@ -247,7 +247,7 @@ export default function AddBook({ setIsAddModalOpen }) {
                   className="w-full px-3 py-2 border border-yellow-200 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
                   min="0"
                 />
-                {errors.books?.fair.copies && (
+                {errors.books?.fair?.copies && (
                   <p className="mt-1 text-sm text-red-600">
                     {errors.books.fair.copies?.message}
                   </p>
@@ -265,7 +265,7 @@ export default function AddBook({ setIsAddModalOpen }) {
                   className="w-full px-3 py-2 border border-red-200 bg-white rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
                   min="0"
                 />
-                {errors.books?.poor.copies && (
+                {errors.books?.poor?.copies && (
                   <p className="mt-1 text-sm text-red-600">
                     {errors.books.poor.copies?.message}
                   </p>
@@ -352,7 +352,9 @@ export default function AddBook({ setIsAddModalOpen }) {
               )}
             </div>
           </div>
-
+          {errors.root && (
+            <p className="mb-1 text-sm text-red-600">{errors.root.message}</p>
+          )}
           {/* Submit Button */}
           <div className="pt-4">
             <button
